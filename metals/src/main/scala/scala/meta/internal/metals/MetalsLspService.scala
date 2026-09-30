@@ -51,6 +51,7 @@ import scala.meta.internal.metals.newScalaFile.NewFileProvider
 import scala.meta.internal.metals.scalacli.ScalaCli
 import scala.meta.internal.metals.scalacli.ScalaCliServers
 import scala.meta.internal.metals.testProvider.BuildTargetUpdate
+import scala.meta.internal.metals.signature.SignatureSearchProvider
 import scala.meta.internal.metals.testProvider.TestSuitesProvider
 import scala.meta.internal.metals.typeHierarchy.TypeHierarchyProvider
 import scala.meta.internal.metals.watcher.FileWatcher
@@ -534,6 +535,11 @@ abstract class MetalsLspService(
     statusBar,
   )
 
+  val signatureSearch: SignatureSearchProvider = new SignatureSearchProvider(
+    buildTargets,
+    folder,
+  )
+
   val semanticDBIndexer: SemanticdbIndexer = new SemanticdbIndexer(
     List(
       referencesProvider,
@@ -541,6 +547,7 @@ abstract class MetalsLspService(
       testProvider,
       buildTargetClasses,
       scalafixProvider,
+      signatureSearch,
     ),
     buildTargets,
     folder,
@@ -693,6 +700,9 @@ abstract class MetalsLspService(
               List[Future[Unit]](
                 onInitialized(),
                 Future(workspaceSymbols.indexClasspath()),
+                Future(
+                  signatureSearch.scanJars(buildTargets.allWorkspaceJars.toSet)
+                ),
                 Future(formattingProvider.load()),
               )
             )

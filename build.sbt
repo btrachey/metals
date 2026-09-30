@@ -9,7 +9,7 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 Global / resolvers += "scala-nightlies" at
   "https://repo.scala-lang.org/artifactory/maven-nightlies"
 
-def localSnapshotVersion = "1.6.9-SNAPSHOT"
+def localSnapshotVersion = "1.6.9-SNAPSHOT-BWT"
 def latestReleaseVersion = "1.6.8"
 def isCI = System.getenv("CI") != null
 def isTest = System.getenv("METALS_TEST") != null
@@ -56,6 +56,10 @@ inThisBuild(
     developers := metalsDevs,
     testFrameworks := List(),
     dependencyOverrides += V.guava,
+    // inkuire-engine wants 2.1.1, Twirl wants 1.1.2; both use only the stable
+    // basic-combinator API, so take the newer one. Build-wide since both
+    // `metals` and `unit` (which depends on it) resolve this transitively.
+    dependencyOverrides += "org.scala-lang.modules" %% "scala-parser-combinators" % "2.1.1",
     // faster publishLocal:
     packageDoc / publishArtifact := sys.env.contains("CI"),
     packageSrc / publishArtifact := sys.env.contains("CI"),
@@ -469,6 +473,9 @@ lazy val metals = project
         scalaVersion.value
       )).cross(CrossVersion.full),
       "org.scalameta" %% "semanticdb-shared" % V.semanticdb(scalaVersion.value),
+      // Inkuire's Hoogle-like type-signature search engine/model (Scala 3 Scaladoc
+      // uses the same library, fed from TASTy; we feed it from SemanticDB instead).
+      "org.virtuslab" %% "inkuire-engine" % "1.0.0-M7",
       "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
       ("org.virtuslab.scala-cli" % "scala-cli-bsp" % V.scalaCli)
         .exclude("ch.epfl.scala", "bsp4j"),

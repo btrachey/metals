@@ -857,6 +857,15 @@ class WorkspaceLspService(
     params match {
       case ServerCommands.ScanWorkspaceSources() =>
         foreachSeqIncludeFallback(_.indexSources(), ignoreValue = true)
+      case ServerCommands.SearchBySignature(query) =>
+        collectSeq((svc: MetalsLspService) =>
+          workDoneProgress.trackFuture(
+            "Searching methods by signature\u2026",
+            svc.signatureSearch.search(query),
+          )
+        ) { results =>
+          results.flatten.asJava
+        }.asJavaObject
       case ServerCommands.RestartBuildServer() =>
         onCurrentFolder(
           _.connect(CreateSession(shutdownBuildServer = true)).ignoreValue,

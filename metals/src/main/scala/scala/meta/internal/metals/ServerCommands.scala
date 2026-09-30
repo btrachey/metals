@@ -540,6 +540,46 @@ object ServerCommands {
     "[string], where the string is a SemanticDB symbol.",
   )
 
+  val SearchBySignature = new ParametrizedCommand[String](
+    "search-by-signature",
+    "Search by Type Signature",
+    """|Searches workspace and dependency (jar) methods/values by type
+       |signature using Inkuire (https://github.com/VirtusLab/Inkuire), the
+       |same Hoogle-like, type-directed search engine Scala 3's Scaladoc uses.
+       |The query describes a signature shape (exact arity, subtyping/variance
+       |aware) rather than "mentions this type somewhere" — write it like a
+       |method type, with `=>` for a zero-argument result.
+       |
+       |The enclosing class/trait is NOT required: methods are matched by their
+       |argument and result types alone. "User, Boolean => Box[Detail]" finds
+       |any method taking a User and a Boolean and returning Box[Detail],
+       |regardless of which class or trait declares it. A top-level comma is
+       |accepted as an argument separator and rewritten to `=>` (so
+       |"User, Boolean => Box[X]" is treated as "User => Boolean => Box[X]");
+       |commas inside `(...)` tuples or `[...]` type arguments are left alone.
+       |Pass an empty string (or omit the argument) to return all indexed
+       |methods, which a downstream UI can fuzzy-filter locally.
+       |
+       |Type names must be bare identifiers: no dotted/path-qualified names
+       |(`Foo.Bar` — including a class member of an `Enumeration` object, e.g.
+       |write `Value`, not `MyEnum.Value`) and no local import aliases (SemanticDB
+       |only knows the real name a type was declared with, e.g. `FeatureFlag`
+       |even if it's imported as `import ...{FeatureFlag => ProtoFeatureFlag}` —
+       |query with `FeatureFlag`). Dots are only meaningful in a `+pkg`/`-pkg`
+       |package filter.
+       |
+       |Examples:
+       |  - "Int => String" finds methods taking an Int and returning a String
+       |  - "User, Boolean => Box[MemberDetailsSummary]" finds any two-arg
+       |    method with those exact types
+       |  - "=> List[Int]" finds zero-argument methods/vals returning List[Int]
+       |  - "List[A] => (A => B) => List[B]" finds a map-shaped method
+       |  - "+com.example Int => String" restricts results to a package
+       |""".stripMargin,
+    "[string], an Inkuire type signature query like 'Int => String'. May be empty to return all indexed methods.",
+    default = Some(""),
+  )
+
   val GotoPosition = new ParametrizedCommand[Location](
     "goto-position",
     "Goto location for position",
@@ -847,6 +887,7 @@ object ServerCommands {
       DisconnectBuildServerAndShutdown,
       ListBuildTargets,
       ScanWorkspaceSources,
+      SearchBySignature,
       StartDebugAdapter,
       StartMainClass,
       StartTestSuite,
