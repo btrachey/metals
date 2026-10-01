@@ -5,15 +5,15 @@ import java.util.jar.JarFile
 import scala.collection.mutable
 import scala.util.control.NonFatal
 
-import org.virtuslab.inkuire.engine.api.InkuireDb
-import org.virtuslab.inkuire.engine.impl.model.AnnotatedSignature
-import org.virtuslab.inkuire.engine.impl.model.Invariance
-import org.virtuslab.inkuire.engine.impl.model.ITID
-import org.virtuslab.inkuire.engine.impl.model.Signature
-import org.virtuslab.inkuire.engine.impl.model.SignatureContext
-import org.virtuslab.inkuire.engine.impl.model.Type
-import org.virtuslab.inkuire.engine.impl.model.TypeName
-import org.virtuslab.inkuire.engine.impl.model.TypeLike
+import scala.meta.internal.metals.signature.inkuire.api.InkuireDb
+import scala.meta.internal.metals.signature.inkuire.model.AnnotatedSignature
+import scala.meta.internal.metals.signature.inkuire.model.Invariance
+import scala.meta.internal.metals.signature.inkuire.model.ITID
+import scala.meta.internal.metals.signature.inkuire.model.Signature
+import scala.meta.internal.metals.signature.inkuire.model.SignatureContext
+import scala.meta.internal.metals.signature.inkuire.model.Type
+import scala.meta.internal.metals.signature.inkuire.model.TypeName
+import scala.meta.internal.metals.signature.inkuire.model.TypeLike
 
 import JvmSignatureParser._
 

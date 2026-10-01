@@ -14,9 +14,9 @@ import scala.meta.internal.semanticdb.TextDocuments
 import scala.meta.internal.semanticdb.XtensionSemanticdbSymbolInformation
 import scala.meta.io.AbsolutePath
 
-import org.virtuslab.inkuire.engine.api.InkuireDb
-import org.virtuslab.inkuire.engine.api.InkuireEnv
-import org.virtuslab.inkuire.engine.impl.model.{
+import scala.meta.internal.metals.signature.inkuire.api.InkuireDb
+import scala.meta.internal.metals.signature.inkuire.api.InkuireEnv
+import scala.meta.internal.metals.signature.inkuire.model.{
   AnnotatedSignature => InkuireSignature
 }
 import org.eclipse.{lsp4j => l}

@@ -5,8 +5,8 @@ import scala.collection.mutable
 import scala.meta.internal.semanticdb.{Signature => _, Type => SType, _}
 import scala.meta.internal.semanticdb.Scala.{DescriptorParser, Symbols}
 
-import org.virtuslab.inkuire.engine.api.InkuireDb
-import org.virtuslab.inkuire.engine.impl.model._
+import scala.meta.internal.metals.signature.inkuire.api.InkuireDb
+import scala.meta.internal.metals.signature.inkuire.model._
 
 /**
  * Converts compiled Scala 2 SemanticDB (`TextDocument`s) into Inkuire's

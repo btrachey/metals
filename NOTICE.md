@@ -417,6 +417,16 @@ Metals contains parts which are derived from
 [the closeau project](https://github.com/non/clouseau). The license for clouseau
 is available here: http://www.apache.org/licenses/LICENSE-2.0.txt
 
+# License notice for Inkuire
+
+Metals contains the Hoogle-like type-signature search engine from
+[the Inkuire project](https://github.com/VirtusLab/Inkuire), vendored from
+the v1.0.0-M9 release into
+`metals/src/main/scala/scala/meta/internal/metals/signature/inkuire` (the
+CLI/serialization surface was dropped; the remainder is reformatted by
+scalafmt). The license for Inkuire is available here:
+http://www.apache.org/licenses/LICENSE-2.0.txt
+
 # License notice for sbt-extras
 
 Metals contains parts which are derived from
